@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+    <title>泰國月遊戲報表</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -33,7 +33,7 @@
 
         @foreach ($timeseries as $item)
             <tr>
-                <td>{{ $item->since }}</th>
+                <td>{{ $item->since }} ~ {{ $item->until }}</th>
                 <td>{{ $item->requests->all }}</td>
             </tr>
         @endforeach
