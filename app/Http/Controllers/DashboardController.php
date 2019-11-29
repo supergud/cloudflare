@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
         $now = Carbon::now()->format('Y-m-d');
 
-        $url = 'https://api.cloudflare.com/client/v4/zones/' . env('CLOUDFLARE_ZONE_ID') . '/analytics/dashboard[?since=2019-10-01T00:00:00Z&until=' . $now . 'T00:00:00Z&continuous=true';
+        $url = 'https://api.cloudflare.com/client/v4/zones/' . env('CLOUDFLARE_ZONE_ID') . '/analytics/dashboard?since=2019-10-01T00:00:00Z&until=' . $now . 'T00:00:00Z&continuous=true';
 
         $headers = [
             'headers' => [
@@ -32,9 +32,31 @@ class DashboardController extends Controller
 
         $result = json_decode($response->getBody()->getContents());
 
+        $labels         = [];
+        $requests_datas = [];
+
+        foreach ($result->result->timeseries as $timeserie) {
+            $labels[]         = substr($timeserie->since, 0, 10);
+            $requests_datas[] = $timeserie->requests->all;
+        }
+
+        $chart = [
+            'labels'   => $labels,
+            'datasets' => [
+                [
+                    'label'           => '瀏覽數人數',
+                    'data'            => $requests_datas,
+                    'backgroundColor' => 'red',
+                    'borderColor'     => 'red',
+                    'fill'            => false,
+                ],
+            ],
+        ];
+
         return view('welcome', [
             'timeseries' => $result->result->timeseries,
-            'totals' => $result->result->totals
+            'totals'     => $result->result->totals,
+            'chart'      => $chart,
         ]);
     }
 
