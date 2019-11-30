@@ -76,7 +76,7 @@
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: '數量'
+                            labelString: '人數'
                         }
                     }]
                 }
